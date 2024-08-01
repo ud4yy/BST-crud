@@ -139,8 +139,6 @@ void LoopNode(struct Node *head){
         slow=slow->next;
         fast=fast->next->next;
     }
-    
-    
 }
 
 void LoopLength(struct Node *head){
@@ -163,9 +161,53 @@ void LoopLength(struct Node *head){
         slow=slow->next;
         fast=fast->next->next;
     }
-    
-    
 }
+
+struct Node *Merge(struct Node *lr,struct Node *rr){
+    struct Node *head= (struct Node*)malloc(sizeof(struct Node));
+    struct Node *temp= (struct Node*)malloc(sizeof(struct Node));
+    temp->next = head;
+    while(lr!=NULL && rr!=NULL){
+        if(lr->data<rr->data){
+            head->next=lr;
+                    lr=lr->next;
+
+        }
+        else{
+            head->next=rr;
+                  rr=rr->next;
+        }
+        head=head->next;
+  
+    }
+    while(rr!=NULL){
+        head->next =rr;
+        head=head->next;
+        rr=rr->next;
+    }
+    while(lr!=NULL){
+        head->next =lr;
+        head=head->next;
+        lr=lr->next;
+    }
+    return temp->next->next;
+} 
+
+struct Node *MergeSort(struct Node *head){
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+    struct Node *mid = FindMiddle(head);
+    struct Node *rr = mid->next;
+    struct Node *ll = head;
+    mid->next=NULL;
+    
+    struct Node *left = MergeSort(ll);
+    struct Node *right = MergeSort(rr);
+    
+    return Merge(left,right);
+}
+
 int main() {
     // Write C code here
     struct Node *head= (struct Node*)malloc(sizeof(struct Node));
@@ -216,5 +258,17 @@ int main() {
     
     LoopNode(head1);
     LoopLength(head1);
+    
+    // head=SortLL(head);
+    int arr1[]={1,3,2};
+    int arr2[]={4,9,2};
+    struct Node * H = arrtoLL(arr1,3);
+    struct Node * H2 = arrtoLL(arr2,3);
+    struct Node *merged =  Merge(H,H2);
+    printLL(merged);
+    
+    
+    struct Node *h = MergeSort(H2);
+    printLL(h);
     return 0;
 }
